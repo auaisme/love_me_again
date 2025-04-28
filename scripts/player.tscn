@@ -1,0 +1,184 @@
+[gd_scene load_steps=28 format=3 uid="uid://cs7802w4vi0xq"]
+
+[ext_resource type="Script" uid="uid://cn8fm0ae0gq81" path="res://scripts/player.gd" id="1_0s3u6"]
+[ext_resource type="Texture2D" uid="uid://dykee44ki54q0" path="res://test-bg.jpg" id="1_fhbv5"]
+[ext_resource type="Texture2D" uid="uid://23nqdhv7w2sa" path="res://icon.svg" id="2_qm0ti"]
+[ext_resource type="Texture2D" uid="uid://c5ql432u6ityt" path="res://cone_fov.png" id="4_2c7ny"]
+[ext_resource type="PackedScene" uid="uid://bfjpx1ig7b3p3" path="res://scripts/bullet.tscn" id="4_38am0"]
+[ext_resource type="Texture2D" uid="uid://xwxrl44pqkj6" path="res://shotgun_spread_canva.png" id="5_2c7ny"]
+[ext_resource type="Texture2D" uid="uid://bwuxjseujan2t" path="res://us_soldier_walk/pixels_00.png" id="5_jj7ip"]
+[ext_resource type="Script" uid="uid://3uvmgtb7jxdh" path="res://scripts/enemy.gd" id="6_0jhex"]
+[ext_resource type="Texture2D" uid="uid://djvfasfgxjy5w" path="res://footprints/pixels_00.png" id="8_clacw"]
+[ext_resource type="Texture2D" uid="uid://durrr044kwahu" path="res://us_soldier_walk/pixels_01.png" id="8_ripyi"]
+[ext_resource type="Script" uid="uid://b2sarifol4r00" path="res://scripts/enemy_detects_player.gd" id="8_xfidv"]
+[ext_resource type="Texture2D" uid="uid://rhv5uhsagrf5" path="res://us_soldier_walk/pixels_02.png" id="9_ahudb"]
+[ext_resource type="Texture2D" uid="uid://cgqnit78ax6py" path="res://footprints/pixels_01.png" id="9_jj7ip"]
+[ext_resource type="Script" uid="uid://dj6sws7inmguv" path="res://scripts/enemy_deagro.gd" id="9_nxd4c"]
+[ext_resource type="Texture2D" uid="uid://b5gksj6nuj426" path="res://footprints/pixels_02.png" id="10_ripyi"]
+[ext_resource type="Texture2D" uid="uid://d0mdphnjrhlyt" path="res://footprints/pixels_03.png" id="11_ahudb"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_fhbv5"]
+polygon = PackedVector2Array(-52, -57, -56, 57, 56, 57.5, 56, -58.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pqap4"]
+size = Vector2(500, 30)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0s3u6"]
+radius = 58.16
+height = 116.32
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jj7ip"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_ripyi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_ahudb")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_pqap4"]
+light_mode = 2
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pqap4"]
+radius = 60.69
+height = 131.53
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nxd4c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_clacw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_jj7ip")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_ripyi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_ahudb")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_38am0"]
+radius = 344.95
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xfidv"]
+radius = 700.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2c7ny"]
+radius = 101.25
+height = 445.81
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2c7ny"]
+polygon = PackedVector2Array(-89, -222, -91, 224, 91, 223, 91, -226)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = -10
+scale = Vector2(10, 10)
+texture = ExtResource("1_fhbv5")
+
+[node name="Sprite2D Wall" type="Sprite2D" parent="." groups=["walls"]]
+position = Vector2(680, -100)
+scale = Vector2(0.5, 2)
+texture = ExtResource("2_qm0ti")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Sprite2D Wall"]
+occluder = SubResource("OccluderPolygon2D_fhbv5")
+
+[node name="RigidBody2D" type="RigidBody2D" parent="Sprite2D Wall" groups=["walls"]]
+gravity_scale = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D Wall/RigidBody2D"]
+scale = Vector2(0.25, 4.3)
+shape = SubResource("RectangleShape2D_pqap4")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." groups=["player"]]
+script = ExtResource("1_0s3u6")
+bullet_scene = ExtResource("4_38am0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("CapsuleShape2D_0s3u6")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+texture = ExtResource("5_jj7ip")
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
+
+[node name="PointLight2D" type="PointLight2D" parent="CharacterBody2D"]
+scale = Vector2(3, 3)
+energy = 0.45
+blend_mode = 2
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter = 2
+texture = ExtResource("4_2c7ny")
+texture_scale = 1.95
+
+[node name="ShotgunAimSprite" type="Sprite2D" parent="CharacterBody2D"]
+visible = false
+scale = Vector2(4, 4)
+texture = ExtResource("5_2c7ny")
+offset = Vector2(36, 0)
+
+[node name="WalkAnimation" type="AnimatedSprite2D" parent="CharacterBody2D"]
+visible = false
+sprite_frames = SubResource("SpriteFrames_jj7ip")
+
+[node name="CharacterBody2D Enemy" type="CharacterBody2D" parent="." groups=["enemies"]]
+material = SubResource("CanvasItemMaterial_pqap4")
+position = Vector2(1075, -95)
+script = ExtResource("6_0jhex")
+speed = 200.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D Enemy"]
+shape = SubResource("CapsuleShape2D_pqap4")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D Enemy"]
+texture = ExtResource("2_qm0ti")
+
+[node name="footprints" type="AnimatedSprite2D" parent="CharacterBody2D Enemy"]
+rotation = -1.5708
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_nxd4c")
+frame_progress = 0.181612
+offset = Vector2(0, 20)
+
+[node name="Area2D" type="Area2D" parent="CharacterBody2D Enemy"]
+script = ExtResource("8_xfidv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D Enemy/Area2D"]
+shape = SubResource("CircleShape2D_38am0")
+
+[node name="AgroLimit" type="Area2D" parent="CharacterBody2D Enemy"]
+script = ExtResource("9_nxd4c")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D Enemy/AgroLimit"]
+shape = SubResource("CircleShape2D_xfidv")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0, 0, 0, 1)
+
+[node name="RigidBody2D" type="RigidBody2D" parent="." groups=["walls"]]
+position = Vector2(-783, -128)
+gravity_scale = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+shape = SubResource("CapsuleShape2D_2c7ny")
+
+[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D/CollisionShape2D"]
+scale = Vector2(1.5, 3.5)
+texture = ExtResource("2_qm0ti")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="RigidBody2D/CollisionShape2D"]
+occluder = SubResource("OccluderPolygon2D_2c7ny")
